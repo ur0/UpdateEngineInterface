@@ -32,24 +32,32 @@
                 android:id="@+id/start"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="left"
-                android:text="Start" />
+                android:layout_gravity="start"
+                android:text="@string/start" />
 
             <Button
                 android:id="@+id/pause"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="Pause"
+                android:text="@string/pause"
                 android:visibility="invisible" />
 
             <Button
                 android:id="@+id/stop"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="right"
-                android:text="Stop"
-                android:visibility="invisible" />
+                android:layout_gravity="end"
+                android:text="@string/stop" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:id="@+id/completed"
+                android:text="@string/completed"
+                android:layout_marginTop="80dp"
+                android:visibility="invisible"/>
         </FrameLayout>
 
     </FrameLayout>

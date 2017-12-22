@@ -1,5 +1,8 @@
 <resources>
     <string name="app_name">UpdateEngine</string>
+    <string name="start">Start</string>
     <string name="pause">Pause</string>
     <string name="resume">Resume</string>
+    <string name="stop">Stop</string>
+    <string name="completed">Installation succeeded. Please reboot your device to continue to Android O</string>
 </resources>
