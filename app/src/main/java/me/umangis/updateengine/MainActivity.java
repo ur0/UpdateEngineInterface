@@ -20,6 +20,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -33,17 +34,20 @@ public class MainActivity extends AppCompatActivity {
     ProgressBar progressBar;
     Button startButton, pauseButton, stopButton;
     boolean paused;
+    private FirebaseAnalytics mFirebaseAnalytics;
 
     private static String[] getInfo() {
         return new String[]{
-                "FILE_HASH=oXUHqx1GahJNSjcY69ZXWjZcR915l6LUI7/UTZEFaz4=",
-                "FILE_SIZE=1157710255",
-                "METADATA_HASH=T7le0182oNiKRPrM6yIqzRzz7+gnvqBuOjSxM8zxqng=",
-                "METADATA_SIZE=90733"
+                "FILE_HASH=o6jHHKAyfn9s2U38EzUYjhwzKMpZYzr3mEJwwdKYtNA=",
+                "FILE_SIZE=1160314050",
+                "METADATA_HASH=p7kFWoD8Hm7tXkdSerAaBukIO/wKKo3lmMQav++9uF0=",
+                "METADATA_SIZE=91224"
+
         };
     }
 
     protected void onCreate(Bundle savedInstanceState) {
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -71,8 +75,8 @@ public class MainActivity extends AppCompatActivity {
     private void setupButtonListeners() {
         startButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                ue.applyPayload("https://storage.googleapis.com/ur0-tissot-oreo/payload_800.bin",
-                        0, 1157710255,
+                ue.applyPayload("https://storage.googleapis.com/ur0-tissot-oreo/payload_800_2.bin",
+                        0, 1160314050,
                         getInfo());
                 pauseButton.setVisibility(View.VISIBLE);
                 stopButton.setVisibility(View.VISIBLE);
@@ -101,6 +105,7 @@ public class MainActivity extends AppCompatActivity {
                 pauseButton.setVisibility(View.INVISIBLE);
                 stopButton.setVisibility(View.INVISIBLE);
                 startButton.setVisibility(View.VISIBLE);
+                paused = false;
             }
         });
     }
@@ -181,14 +186,28 @@ public class MainActivity extends AppCompatActivity {
             status = aStatus;
             progressBar.setProgress(Math.round(progress), true);
 
+            Bundle params = new Bundle();
+            params.putFloat("install_percent", aPercent);
+            mFirebaseAnalytics.logEvent("install_progress", params);
+
+            if (aStatus > 0)
+                findViewById(R.id.stop).setVisibility(View.VISIBLE);
+
             Log.w("UEI", "Status: " + Integer.toString(status) +
                     ", " + Float.toString(progress) + "% done.");
         }
 
         public void onPayloadApplicationComplete(int errCode) {
             Log.w("UEI", "Payload application complete, error: " + Integer.toString(errCode));
-            if (errCode == 0)
-                Toast.makeText(MainActivity.this, "Update done, reboot to continue to Android O", Toast.LENGTH_SHORT).show();
+
+            Bundle params = new Bundle();
+            params.putInt("error_code", errCode);
+            mFirebaseAnalytics.logEvent("install_result", params);
+
+            if (errCode == 0) {
+                Log.w("UEI", "Installation succeeded!");
+                findViewById(R.id.completed).setVisibility(View.VISIBLE);
+            }
         }
     }
 }
