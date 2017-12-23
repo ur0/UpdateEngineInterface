@@ -9,7 +9,7 @@ change, as I plan to make this app universally compatible).
 Note that the following requirements exist on a standard device -
 - If you want to bring your own OTA, the signature for the payload.bin must 
 be valid (not a concern if you're not modifying it)
-- This app must have *system* priviliges, i.e. it must be installed into
+- This app must have *system* privileges, i.e. it must be installed into
 `/system/priv-app` or equivalent. The current approach is to wrap this into a
 Magisk module, which greatly simplifies the process for the average user.
 
